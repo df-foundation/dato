@@ -2,7 +2,7 @@
 
 ----------------------------------------
 
-`dpipe` is an open source library that provides **declarative syntactical sugar** within python to improve the readability of data manipulations. For those familiar with the R tidyverse ecosystem, `dpipe` facilitates magrittr-style piping using the right bitshift operator `>>`, while staying largely pythonic in implementation. Unlike other `pandas`-oriented systems (e.g. [dfply](https://github.com/kieferk/dfply) or [pandas-ply](https://github.com/coursera/pandas-ply)), `dpipe` is meant to be flexible, and therefore does not enforce any particular object input types.
+`dpipe` is an open source library that provides **declarative syntactic sugar** within python to improve the readability of data manipulations. For those familiar with the R tidyverse ecosystem, `dpipe` facilitates magrittr-style piping using the right bitshift operator `>>`, while staying largely pythonic in implementation. Unlike other `pandas`-oriented systems (e.g. [dfply](https://github.com/kieferk/dfply) or [pandas-ply](https://github.com/coursera/pandas-ply)), `dpipe` is meant to be flexible, and therefore does not enforce any particular object input types.
 
 We used this framework to implement data science-specific methods to improve QOL when performing repetitive data-related tasks (and to illustrate the potential of `dpipe`). Our biggest pain points in this domain have been:
 
@@ -24,14 +24,13 @@ A common pattern in exploratory analyses is to aggregate one value with respect 
 
 ```
 df['date'] = pd.to_datetime(df.date)
-gb = df.groupby('date').sum()['sale_value']
-gb.plot()
+gb = df.groupby('date').sum()['sale_value'].plot()
 ```
 
 While `pandas` has already done an incredible amount of heavy lifting to make this aggregation syntactically quite simple, it still takes some thought, trial, and error to correctly write the above few commands. The same command in `dpipe` can be rewritten as follows:
 
 ```
-df >> GroupBy('date') >> Sum('sale_value') >> Plot()
+df >> ToDatetime('date') >> GroupBy('date') >> Sum('sale_value') >> Plot()
 ```
 
 

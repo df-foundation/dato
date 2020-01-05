@@ -16,6 +16,13 @@ plot_style = {
 
 
 @Pipeable
+def ToDatetime(df, *args, **kwargs):
+    for column in args:
+        df[column] = pd.to_datetime(df[column], **kwargs)
+    return df
+
+
+@Pipeable
 def Drop(df, *args, axis=1, **kwargs):
     """
     Implements `df.DataFrame.drop()`.
@@ -26,13 +33,7 @@ def Drop(df, *args, axis=1, **kwargs):
 
 
 @Pipeable
-def GroupBy(df, column, make_copy=True, **kwargs):
-    if make_copy:
-        df = df.copy()
-
-    if series_is_date(df[column]):
-        df[column] = pd.to_datetime(df[column])
-
+def GroupBy(df, column, **kwargs):
     gb = df.groupby(column, **kwargs)
     return gb
 
