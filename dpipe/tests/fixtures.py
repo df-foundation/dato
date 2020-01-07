@@ -1,4 +1,5 @@
 import pytest
+import numpy as np
 import pandas as pd
 from dpipe.sampledata.datagen import user_data, purchase_data
 
@@ -15,7 +16,21 @@ def mock_data_a():
 
 @pytest.fixture()
 def mock_data_b():
-    return  pd.DataFrame({'id': [0,1,2], 'c': [9,8,0]})
+    return pd.DataFrame({'id': [0,1,2], 'c': [9,9,8]})
+
+
+@pytest.fixture()
+def mock_data_date():
+    return pd.DataFrame({'id': [0,1,2], 'date': ['2019-01-01', '2019-01-02', '2019-01']})
+
+
+@pytest.fixture()
+def mock_data_null():
+    return pd.DataFrame({'id': [0,1,2], 'value': [np.nan, np.nan, 1]})
+
+@pytest.fixture()
+def mock_data_training():
+    return pd.DataFrame({'x1': [0,1,2], 'x2':['sad', 'happy', 'okay'], 'y': [0,2,1]})
 
 
 @pytest.fixture()
