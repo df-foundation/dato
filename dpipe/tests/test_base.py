@@ -14,7 +14,7 @@ def test_Pipeable_base_object_type(mock_class_object):
 
     # WHEN
     pipeable_object = Pipeable(mock_class_object)
-    assert type(pipeable_object.base_object) == type(newobject)
+    assert type(pipeable_object.base_object) == type(mock_class_object)
 
 
 def test_Pipeable_getattr(mock_class_object):

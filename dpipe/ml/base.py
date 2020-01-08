@@ -10,38 +10,54 @@ def _print_regression_error(y_true, y_pred):
 
 
 class _ModelSpec():
-    def __init__(self, dpipe_output, estimator=None, **kwargs):
+    def __init__(self, df):
+        self.data = df
+        self.original_data = df.copy()
+        self.train = df
+        self.test = None
+        self.encoders = {}
+        self.X_train = self.data.iloc[:,:-1]
+        self.y_train = self.data.iloc[:,-1]
+        self.X_test = None
+        self.y_test = None
 
-        # Handle if train test split has been used (and so the input is a two-element list).
-        if type(dpipe_output) == list:
-            self.train = dpipe_output[0]
-            self.test = dpipe_output[1]
-            self.test_X = self.test.iloc[:,:-1]
-            self.test_y = self.test.iloc[:,-1]
-        else:
-            self.train = dpipe_output[0]
-            self.test = None
+    def encode(self, Encoder, columns):
+        enc_dict = {}
+        for column in columns:
+            enc = Encoder()
+            self.data[column] = enc.fit_transform(self.data[column])
+            enc_dict[column] = enc
+        self.encoders.update(enc_dict)
 
-        self.train_X = self.train.iloc[:,:-1]
-        self.train_y = self.train.iloc[:,-1]
-        self.estimator = estimator(**kwargs)
+        return self.data, enc_dict
+
+    def train_test_split(self, **kwargs):
+        self.train, self.test = skl.model_selection.train_test_split(self.data, **kwargs)
+        self.X_train = self.train.iloc[:,:-1]
+        self.y_train = self.train.iloc[:,-1]
+        self.X_test = self.test.iloc[:,:-1]
+        self.y_test = self.test.iloc[:,-1]
+        return self.train, self.test
+
+    def instantiate_estimator(self, Estimator, **kwargs):
+        self.estimator = Estimator(**kwargs)
 
     def predict(self):
-        self.train_y_prediction = self.estimator.predict(self.train_X)
+        self.train_y_prediction = self.estimator.predict(self.X_train)
         if self.test is not None:
-            self.test_y_prediction = self.estimator.predict(self.test_X)
+            self.test_y_prediction = self.estimator.predict(self.X_test)
 
     def evaluate(self, kind='regressor'):
         if kind=='regressor':
             if self.test is not None:
                 print('\033[1mTraining set')
                 print(len('Training set')*'-','\033[0m')
-            _print_regression_error(self.train_y, self.train_y_prediction)
+            _print_regression_error(self.y_train, self.train_y_prediction)
             print('\n')
             if self.test is not None:
                 print('\033[1mTest set')
                 print(len('Test set')*'-','\033[0m')
-                _print_regression_error(self.test_y, self.test_y_prediction)
+                _print_regression_error(self.y_test, self.test_y_prediction)
         elif kind=='classifier':
             if self.test is not None:
                 # Plot roc auc curve.
