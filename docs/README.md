@@ -2,7 +2,7 @@
 
 ![](https://github.com/dataframehq/dpipe/blob/master/docs/_static/img/dpipe.png?raw=true)
 
-`dpipe` is an open source library that provides **declarative syntactic sugar** within python to improve the readability of data manipulations. For those familiar with the R tidyverse ecosystem, `dpipe` facilitates magrittr-style piping using the right bitshift operator `>>`, while staying largely pythonic in implementation. Unlike other `pandas`-oriented systems \(e.g. [dfply](https://github.com/kieferk/dfply) or [pandas-ply](https://github.com/coursera/pandas-ply)\), `dpipe` is meant to be flexible, and therefore does not enforce any particular object input types.
+`dpipe` is an open source library that provides **declarative syntactic sugar** within python to improve the readability and speed of data manipulations. For those familiar with the R tidyverse ecosystem, `dpipe` facilitates magrittr-style piping using the right bitshift operator `>>`, while staying largely pythonic in implementation. Unlike other `pandas`-oriented systems \(e.g. [dfply](https://github.com/kieferk/dfply) or [pandas-ply](https://github.com/coursera/pandas-ply)\), `dpipe` is meant to be flexible, and therefore does not enforce any particular object input types.
 
 Simply put, nested functions can be decorated so that
 

@@ -1,6 +1,6 @@
 <img width="250" src="https://github.com/dataframehq/dpipe/blob/master/docs/_static/img/dpipe.png?raw=true">
 
-`dpipe` is an open source library that provides **declarative syntactic sugar** within python to improve the readability of data manipulations. For those familiar with the R tidyverse ecosystem, `dpipe` facilitates magrittr-style piping using the right bitshift operator `>>`, while staying largely pythonic in implementation. Unlike other `pandas`-oriented systems \(e.g. [dfply](https://github.com/kieferk/dfply) or [pandas-ply](https://github.com/coursera/pandas-ply)\), `dpipe` is meant to be flexible, and therefore does not enforce any particular object input types.
+`dpipe` is an open source library that provides **declarative syntactic sugar** within python to improve the readability and speed of data manipulations. For those familiar with the R tidyverse ecosystem, `dpipe` facilitates magrittr-style piping using the right bitshift operator `>>`, while staying largely pythonic in implementation. Unlike other `pandas`-oriented systems \(e.g. [dfply](https://github.com/kieferk/dfply) or [pandas-ply](https://github.com/coursera/pandas-ply)\), `dpipe` is meant to be flexible, and therefore does not enforce any particular object input types.
 
 Simply put, nested functions can be decorated so that
 
@@ -36,6 +36,8 @@ pip install dpipe
 `dpipe` is meant to be flexible, and therefore can accept \(almost\) anything as input. Creating custom functions compatible with the `dpipe` framework is therefore quite easy. The class `dpipe.base.Pipeable` can wrap or decorate any method to enable compatibility with the `>>` operator. For example:
 
 ```text
+from dpipe import Pipeable
+
 @Pipeable
 def Func(*args, **kwargs):
     return func(*args, **kwargs)
@@ -73,6 +75,7 @@ gb = df.groupby('date').sum()['sale_value'].plot()
 While `pandas` has already done an incredible amount of heavy lifting to make this aggregation syntactically quite simple, it still takes some thought, trial, and error to correctly write the above few commands. The same command in `dpipe` can be rewritten as follows:
 
 ```text
+from dpipe import *
 df >> ToDatetime('date') >> GroupBy('date') >> Sum('sale_value') >> Plot()
 ```
 
@@ -94,6 +97,7 @@ While this script isn't particularly long, each argument \(`s` for `scatter`, th
 We therefore implement some improved basic styling to reduce the overhead of using matplotlib \(granted, style is incredibly subjective, and you may find our decisions horrendous\). At the least, we hope that this will improve the readability of your code, and at best, reduce the need to use any matplotlib styling.
 
 ```text
+from dpipe import Scatter
 (a.lat, a.lng) >> Scatter
 (b.lat, b.lng) >> Scatter(alpha=0.1)
 (c.lat, c.lng) >> Scatter(alpha=0.1)
@@ -109,12 +113,16 @@ A disclaimer regarding ML: while, in general, `dpipe` does not modify outputs, b
 * `m.test`: the test data.
 * `m.estimator`: the underlying scikit-learn estimator.
 
-A typical full-on ML effort \(without any sort of categorical encoding\) can be condensed as follows:
+A typical full-on ML effort (without any hyperparameter tuning) can be condensed as follows:
 
 ```text
+import numpy as np
+import sklearn
 df = pd.merge(users, purchases, on='id_user')
-df = df[['population', 'density', 'sale_value']]
-X = df[['population', 'density']]
+le = sklearn.preprocessing.LabelEncoder()
+df['city'] = le.fit_transform(df.city)
+df = df[['population', 'density', 'sale_value', 'city']]
+X = df[['population', 'density', 'city']]
 y = df['sale_value']
 X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(X, y)
 reg = sklearn.linear_model.LinearRegression()
@@ -132,10 +140,12 @@ print('Root mean squared error:', np.sqrt(sklearn.metrics.mean_squared_error(y_t
 But it's still clearly quite cumbersome, even without the imports. With `dpipe` tooling, this entire process can be condensed as follows:
 
 ```text
+from dpipe import *
 modelspec = (users, purchases) \
     >> Merge(on='id_user') \
-    >> Select('population', 'density', 'sale_value') \
-    >> SpecifyLabel('sale_value') \
+    >> Select('population', 'density', 'sale_value', 'city') \
+    >> InitModel(label='sale_value') \
+    >> LabelEnc(columns=['city']) \
     >> TrainTestSplit \
     >> LinearReg
 ```

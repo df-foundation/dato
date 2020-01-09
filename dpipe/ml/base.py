@@ -1,5 +1,33 @@
+import inspect
 import numpy as np
 import sklearn as skl
+
+FIT_KWS = [
+    'sample_weight',
+    'check_input',
+    'X_idx_sorted',
+    'eval_set',
+    'eval_metric',
+    'early_stopping_rounds',
+    'verbose',
+    'xgb_model',
+    'sample_weight_eval_set',
+    'callbacks',
+]
+
+def _separate_estimator_fit_params(Estimator, **kwargs):
+    est_params = inspect.getfullargspec(Estimator)[0]
+    fit_params = inspect.getfullargspec(Estimator().fit)[0]
+
+    est_kwargs = {}
+    fit_kwargs = {}
+    for kw, val in kwargs.items():
+        if kw in est_params:
+            est_kwargs[kw] = val
+        elif kw in fit_params:
+            fit_kwargs[kw] = val
+
+    return est_kwargs, fit_kwargs
 
 
 def _print_regression_error(y_true, y_pred):
@@ -43,24 +71,33 @@ class _ModelSpec():
         self.estimator = Estimator(**kwargs)
 
     def predict(self):
-        self.train_y_prediction = self.estimator.predict(self.X_train)
+        self.y_train_pred = self.estimator.predict(self.X_train)
         if self.test is not None:
-            self.test_y_prediction = self.estimator.predict(self.X_test)
+            self.y_test_pred = self.estimator.predict(self.X_test)
 
     def evaluate(self, kind='regressor'):
         if kind=='regressor':
             if self.test is not None:
                 print('\033[1mTraining set')
                 print(len('Training set')*'-','\033[0m')
-            _print_regression_error(self.y_train, self.train_y_prediction)
+            _print_regression_error(self.y_train, self.y_train_pred)
             print('\n')
             if self.test is not None:
                 print('\033[1mTest set')
                 print(len('Test set')*'-','\033[0m')
-                _print_regression_error(self.y_test, self.test_y_prediction)
+                _print_regression_error(self.y_test, self.y_test_pred)
         elif kind=='classifier':
             if self.test is not None:
                 # Plot roc auc curve.
                 pass
 
-
+    def instantiate_train_predict_eval(self, Estimator, kind='regressor', **kwargs):
+        """
+        Instantiate, fit, predict, train.
+        """
+        est_kwargs, fit_kwargs = _separate_estimator_fit_params(Estimator)
+        self.instantiate_estimator(Estimator, **est_kwargs)
+        self.estimator.fit(self.X_train, self.y_train, **fit_kwargs)
+        self.predict()
+        self.evaluate(kind=kind)
+        return self.estimator

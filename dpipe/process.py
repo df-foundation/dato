@@ -101,6 +101,11 @@ def Merge(*args, unpack_input=True, **kwargs):
 
 
 @Pipeable
+def ReadCSV(*args, **kwargs):
+    return pd.read_csv(*args, **kwargs)
+
+
+@Pipeable
 def Sample(df, **kwargs):
     return df.sample(**kwargs)
 

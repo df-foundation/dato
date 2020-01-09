@@ -57,7 +57,7 @@ def mpl_style():
     font = {'family' : 'Helvetica',
             'size'   : 8}
     mpl.rc('font', **font)
-
+    show_grid()
 
 def mpl_style_decorator(func):
     def wrapper(*args, **kwargs):
