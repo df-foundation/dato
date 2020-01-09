@@ -1,6 +1,19 @@
-<img width="250" src="https://github.com/dataframehq/dpipe/blob/master/docs/_static/img/dpipe.png?raw=true">
+<img width="250" src="https://github.com/dataframehq/dato/blob/master/docs/_static/img/dato.png?raw=true">
 
-`dpipe` is an open source library that provides **declarative syntactic sugar** within python to improve the readability and speed of data manipulations. For those familiar with the R tidyverse ecosystem, `dpipe` facilitates magrittr-style piping using the right bitshift operator `>>`, while staying largely pythonic in implementation. Unlike other `pandas`-oriented systems \(e.g. [dfply](https://github.com/kieferk/dfply) or [pandas-ply](https://github.com/coursera/pandas-ply)\), `dpipe` is meant to be flexible, and therefore does not enforce any particular object input types.
+`dato` is an open source library that provides a **rapid, declarative ecosystem for reproducible data science** within python. This consists of three major sub-modules:
+
+* `dato.pipe`, which facilitates R magrittr-style piping using the right bitshift operator `>>`, while staying largely pythonic in implementation. And unlike other `pandas`-oriented systems \(e.g. [dfply](https://github.com/kieferk/dfply) or [pandas-ply](https://github.com/coursera/pandas-ply)\), `dato.pipe` is meant to be flexible, and therefore does not enforce any particular object input types.
+* `dato.plot`, which sets presentation-ready default styling for plotting tools, such as `matplotlib`.
+* `dato.ml`, which greatly simplifies and standardizes syntax across popular ML libraries, and implements automatic.
+
+## Installation
+
+```text
+pip install dato
+```
+
+
+## Usage: piping
 
 Simply put, nested functions can be decorated so that
 
@@ -14,46 +27,38 @@ can be rewritten
 a >> b >> c >> d
 ```
 
-Though the basic piping behavior is supported in R, `dpipe` enables it within Python for easier debugging and productionization support, while also forcing this pattern to be explicitly scoped for safety \(we also support piping of multiple arguments!\). In addition, we supply convenient, opinionated sub-modules that we personally use to quickly execute simple data science tasks.
+Though the basic piping behavior is supported in R, `dato` enables it within Python for easier debugging and productionization support, while also forcing this pattern to be explicitly scoped for safety \(we also support piping of multiple arguments!\). In addition, we supply convenient, opinionated sub-modules that we personally use to quickly execute simple data science tasks.
 
 Our primary objective here is not to provide a new library that supersedes data science staples such as `pandas`, `matplotlib`, or `scikit-learn` but rather, to:
 
 1. Provide a flexible way to safely and easily use _any_ library, declaratively, in support of declarative data workflows.
 2. Introduce opinionated versions of common data operations to improve QOL.
 
-## Why pipe?
-
 Although piping has some downside as a general programming paradigm \(particularly in obscuring code errors and being naturally difficult to debug\), we argue that these downsides are outweighed by a level of concision and maintainability it lends to _data workflows_. When working with data in development environments which contain hidden states \(such as jupyter or R markdown\), reproducibility of code can be difficult to consistently achieve. Piping mitigates this danger by \(1\) enforcing a consistent order of operations, and \(2\) disallowing hidden states. Consequently, **the piping paradigm is naturally reproducible, production-ready, and stable as soon as it is written** -- properties that are of paramount importance in data work.
-
-## Installation
-
-```text
-pip install dpipe
-```
 
 ## Basic usage: the `Pipeable` class
 
-`dpipe` is meant to be flexible, and therefore can accept \(almost\) anything as input. Creating custom functions compatible with the `dpipe` framework is therefore quite easy. The class `dpipe.base.Pipeable` can wrap or decorate any method to enable compatibility with the `>>` operator. For example:
+`dato` is meant to be flexible, and therefore can accept \(almost\) anything as input. Creating custom functions compatible with the `dato` framework is therefore quite easy. The class `dato.base.Pipeable` can wrap or decorate any method to enable compatibility with the `>>` operator. For example:
 
 ```text
-from dpipe import Pipeable
+from dato import Pipeable
 
 @Pipeable
 def Func(*args, **kwargs):
     return func(*args, **kwargs)
 ```
 
-Or even more concisely, any existing function `func` that you'd like to use with `dpipe` can be trivially implemented as follows:
+Or even more concisely, any existing function `func` that you'd like to use with `dato` can be trivially implemented as follows:
 
 ```text
 Func = Pipeable(func)
 ```
 
-The entire piping framework is incredibly simple \(it only takes up around 20 lines of code\), and can be found in `dpipe.base.Pipeable`. If you write a custom function, please consider making a pull request. _Happy piping!_
+The entire piping framework is incredibly simple \(it only takes up around 20 lines of code\), and can be found in `dato.base.Pipeable`. If you write a custom function, please consider making a pull request. _Happy piping!_
 
 ## Some illustrative examples
 
-We used this framework to implement data science-specific methods to improve QOL when performing repetitive data-related tasks \(and to illustrate the potential of `dpipe`\). Our biggest pain points in this domain have been:
+We used this framework to implement data science-specific methods to improve QOL when performing repetitive data-related tasks \(and to illustrate the potential of `dato`\). Our biggest pain points in this domain have been:
 
 * Remembering pandas syntax and defaults.
 * Styling matplotlib visualizations.
@@ -72,10 +77,10 @@ df['date'] = pd.to_datetime(df.date)
 gb = df.groupby('date').sum()['sale_value'].plot()
 ```
 
-While `pandas` has already done an incredible amount of heavy lifting to make this aggregation syntactically quite simple, it still takes some thought, trial, and error to correctly write the above few commands. The same command in `dpipe` can be rewritten as follows:
+While `pandas` has already done an incredible amount of heavy lifting to make this aggregation syntactically quite simple, it still takes some thought, trial, and error to correctly write the above few commands. The same command in `dato` can be rewritten as follows:
 
 ```text
-from dpipe import *
+from dato import *
 df >> ToDatetime('date') >> GroupBy('date') >> Sum('sale_value') >> Plot()
 ```
 
@@ -97,7 +102,7 @@ While this script isn't particularly long, each argument \(`s` for `scatter`, th
 We therefore implement some improved basic styling to reduce the overhead of using matplotlib \(granted, style is incredibly subjective, and you may find our decisions horrendous\). At the least, we hope that this will improve the readability of your code, and at best, reduce the need to use any matplotlib styling.
 
 ```text
-from dpipe import Scatter
+from dato import Scatter
 (a.lat, a.lng) >> Scatter
 (b.lat, b.lng) >> Scatter(alpha=0.1)
 (c.lat, c.lng) >> Scatter(alpha=0.1)
@@ -107,7 +112,7 @@ from dpipe import Scatter
 
 We also provide limited, but ever-growing ML tooling, wrapping sklearn and xgboost. We do not intend this to replace existing libraries, but to more quickly test the feasibility of a model.
 
-A disclaimer regarding ML: while, in general, `dpipe` does not modify outputs, because of the complex, branching nature of machine-learning workflows \(creating and holding onto a validation set, for example\), we created a hidden `_ModelSpec` method that holds model-related information \(the train and test sets\). A `_ModelSpec` class object \(here represented as `m`\) contains the following attributes:
+A disclaimer regarding ML: while, in general, `dato` does not modify outputs, because of the complex, branching nature of machine-learning workflows \(creating and holding onto a validation set, for example\), we created a hidden `_ModelSpec` method that holds model-related information \(the train and test sets\). A `_ModelSpec` class object \(here represented as `m`\) contains the following attributes:
 
 * `m.train`: the training data.
 * `m.test`: the test data.
@@ -137,10 +142,10 @@ print('Mean absolute error:', sklearn.metrics.mean_absolute_error(y_test, y_pred
 print('Root mean squared error:', np.sqrt(sklearn.metrics.mean_squared_error(y_test, y_pred)))
 ```
 
-But it's still clearly quite cumbersome, even without the imports. With `dpipe` tooling, this entire process can be condensed as follows:
+But it's still clearly quite cumbersome, even without the imports. With `dato` tooling, this entire process can be condensed as follows:
 
 ```text
-from dpipe import *
+from dato import *
 modelspec = (users, purchases) \
     >> Merge(on='id_user') \
     >> Select('population', 'density', 'sale_value', 'city') \

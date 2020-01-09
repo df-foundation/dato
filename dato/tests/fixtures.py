@@ -1,7 +1,7 @@
 import pytest
 import numpy as np
 import pandas as pd
-from dpipe.sampledata.datagen import user_data, purchase_data
+from dato.sampledata.datagen import user_data, purchase_data
 
 
 @pytest.fixture()

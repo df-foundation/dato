@@ -1,6 +1,6 @@
 import sklearn as skl
 
-from dpipe.ml import InitModel, LabelEnc, TrainTestSplit, LinearReg
+from dato.ml import InitModel, LabelEnc, TrainTestSplit, LinearReg
 
 
 def full_mock_model(df, Encoder, Estimator):

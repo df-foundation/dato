@@ -3,10 +3,10 @@ import pandas as pd
 import matplotlib as mpl
 
 from .fixtures import mock_user_data, mock_class_object
-from dpipe.base import Pipeable
-from dpipe.utils import is_date, series_is_date
+from dato.base import Pipeable
+from dato.utils import is_date, series_is_date
 
-import dpipe
+import dato
 
 
 def test_is_date():

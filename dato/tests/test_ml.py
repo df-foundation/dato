@@ -3,11 +3,11 @@ import sklearn as skl
 
 from .fixtures import mock_data_a, mock_data_b, mock_data_date, mock_data_training, mock_user_data
 from .helpers import full_mock_model, compare_encoders
-from dpipe.base import Pipeable
-from dpipe.process import Drop, GroupBy, Mean, Merge, Sample, Select, Sum, ToDatetime
-from dpipe.ml import LabelEnc
+from dato.base import Pipeable
+from dato.process import Drop, GroupBy, Mean, Merge, Sample, Select, Sum, ToDatetime
+from dato.ml import LabelEnc
 
-import dpipe
+import dato
 
 EPS = 1e-10
 

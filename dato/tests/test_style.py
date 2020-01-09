@@ -2,10 +2,10 @@ import pytest
 import matplotlib as mpl
 
 from .fixtures import mock_user_data, mock_class_object
-from dpipe.base import Pipeable
-from dpipe.style import mpl_style_decorator
+from dato.base import Pipeable
+from dato.style import mpl_style_decorator
 
-import dpipe
+import dato
 
 
 def test_mpl_style_decorator_state_restoration():

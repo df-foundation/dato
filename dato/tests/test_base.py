@@ -2,10 +2,10 @@ import pytest
 import pandas as pd
 
 from .fixtures import mock_user_data, mock_class_object
-from dpipe.base import Pipeable
-from dpipe.process import GroupBy
+from dato.base import Pipeable
+from dato.process import GroupBy
 
-import dpipe
+import dato
 
 
 def test_Pipeable_base_object_type(mock_class_object):
