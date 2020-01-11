@@ -1,10 +1,12 @@
 import functools
 
+
 class Pipeable():
     """Class that enables `>>` to function as a piping operator.
     """
 
     def __init__(self, base_object, *args, unpack_input=False, use_first_arg_only=False, **kwargs):
+        self.__doc__ = base_object.__doc__
         self.base_object = base_object
         self.args = args
         self.kwargs = kwargs
@@ -50,4 +52,17 @@ def use_first_arg_only(pipeable):
     """
     pipeable.use_first_arg_only = True
     return pipeable
+
+
+def append_docstring(original_function):
+    doc_to_append = original_function.__doc__
+    def wrapper(func):
+        header = 'Original `{}` docstring'.format(original_function.__name__)
+        header += '\n\t' + len(header)*'='
+        header = '\n\t' + header + '\n'
+
+        func.__doc__ += header
+        func.__doc__ += doc_to_append
+        return func
+    return wrapper
 

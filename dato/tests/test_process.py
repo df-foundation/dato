@@ -85,7 +85,7 @@ def test_Sample_type(mock_user_data: pd.DataFrame):
 
 def test_Select(mock_user_data: pd.DataFrame):
     # WHEN
-    columns_to_select = ['state_name']
+    columns_to_select = ['state_name', 'population']
     subset = mock_user_data >> Select(*columns_to_select)
 
     # THEN
