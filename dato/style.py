@@ -15,6 +15,7 @@ STYLES = {
         'grid': '#383B3F',
         'ticks': '#9CA7A8',
         'labels': '#9CA7A8',
+        'title': 'white',
         'bg': '#222626',
         'plotbg': '#222626',
         'edge': '#4A5151',
@@ -23,6 +24,7 @@ STYLES = {
         'cycler': ["#463b75", "#e01a4f", "#6c969d", "#0c090d", "#A7D49B",],
         'grid': '#F5F4F8',
         'bg': (1, 1, 1, 0),
+        'title': 'black',
         'plotbg': 'white',
         'ticks': 'black',
         'edge': 'black',
@@ -53,6 +55,7 @@ def use(style_name=None, dato_only=False):
         mpl.rcParams['ytick.color'] = style['ticks']
         mpl.rcParams['axes.labelcolor'] = style['labels']
         mpl.rcParams['axes.edgecolor'] = style['edge']
+        mpl.rcParams['text.color'] = style['title']
 
         mpl.rcParams['figure.figsize'] = [4.86, 3]
         mpl.rcParams['figure.dpi'] = 130

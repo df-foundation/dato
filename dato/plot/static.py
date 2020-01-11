@@ -48,7 +48,10 @@ def Plot(data, kind='line', x=None, y=None, row=None, col=None, hue=None, **kwar
         g = DatoFacetGrid(data, row=row, col=col, hue=hue, **kwargs)
         g = g.map(plot_function, x, y, **kwargs)
     else:
-        g = data >> plot_function(x=x, y=y, **kwargs)
+        if (x is not None):
+            g = data >> plot_function(x=x, y=y, **kwargs)
+        else:
+            g = data >> plot_function(**kwargs)
     return g
 
 
