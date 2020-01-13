@@ -1,6 +1,6 @@
 # Table of contents
 
-* [dataframehq/dpipe](README.md)
+* [dataframehq/dato](README.md)
 
 ## Creating pipeable functions
 

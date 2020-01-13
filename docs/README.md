@@ -1,13 +1,15 @@
 # dataframehq/dato
 
+
+
 ![](https://github.com/dataframehq/dato/blob/master/docs/_static/img/dato.png?raw=true)
 
-`dato` is an open source library that provides a **rapid, declarative ecosystem for reproducible data science** within python. This consists of three major sub-modules:
+`dato` is an open source library that provides a **rapid, declarative ecosystem for reproducible data science** within python. This consists of four major sub-modules:
 
-* `dato.base`, which facilitates R magrittr-style piping using the right bitshift operator `>>`, while staying largely pythonic in implementation. And unlike other `pandas`-oriented systems \(e.g. [dfply](https://github.com/kieferk/dfply) or [pandas-ply](https://github.com/coursera/pandas-ply)\), `dato.pipe` is meant to be flexible, and therefore does not enforce any particular object input types.
-* `dato.process`, which implements pipe-ready pandas-style functionality.
-* `dato.plot`, which sets presentation-ready default styling for plotting tools, such as `matplotlib`.
-* `dato.ml`, which greatly simplifies and standardizes syntax across popular ML libraries, and implements automatic.
+* **`dato.base`** Facilitates R magrittr-style piping using the right bitshift operator `>>`, while staying largely pythonic in implementation. And unlike other `pandas`-oriented systems \(e.g. [dfply](https://github.com/kieferk/dfply) or [pandas-ply](https://github.com/coursera/pandas-ply)\), `dato.pipe` is meant to be flexible, and therefore does not enforce any particular object input types.
+* **`dato.process`** Implements pipe-ready pandas-style data-wrangling methods.
+* **`dato.plot`**  Sets presentation-ready default styling for `matplotlib`, while enabling `seaborn`-esque extended functionality, all under a common `pandas.DataFrame.plot`-like syntax.
+* **`dato.ml`** Simplifies and standardizes syntax across popular ML libraries \(_in development_\).
 
 ## Installation
 
@@ -15,7 +17,8 @@
 pip install dato
 ```
 
-## Usage: piping
+## Usage: **piping**
+
 Simply put, nested functions can be decorated so that
 
 ```text
@@ -27,6 +30,8 @@ can be rewritten
 ```text
 a >> b >> c >> d
 ```
+
+This can be accomplished by either using the `Pipeable` class as a decorator around `b`, `c`, and `d`, or by simply setting `b=Pipeable(b)`.
 
 Though the basic piping behavior is supported in R, `dato` enables it within Python for easier debugging and productionization support, while also forcing this pattern to be explicitly scoped for safety \(we also support piping of multiple arguments!\). In addition, we supply convenient, opinionated sub-modules that we personally use to quickly execute simple data science tasks.
 
