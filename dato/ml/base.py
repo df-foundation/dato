@@ -1,6 +1,10 @@
 import inspect
 import numpy as np
 import sklearn as skl
+import matplotlib.pyplot as plt
+
+
+from ..style import mpl_style_decorator
 
 FIT_KWS = [
     'sample_weight',
@@ -37,6 +41,13 @@ def _print_regression_error(y_true, y_pred):
     print('Root mean squared error:', np.sqrt(skl.metrics.mean_squared_error(y_true, y_pred)))
 
 
+@mpl_style_decorator
+def _plot_roc_curve(y_true, y_pred, **kwargs):
+    roc = skl.metrics.roc_curve(y_true, y_pred, **kwargs)
+    plt.plot(roc[0], roc[1], 'o-')
+    plt.plot([0,0], [1,1], ':')
+
+
 class _ModelSpec():
     def __init__(self, df):
         self.data = df
@@ -70,10 +81,15 @@ class _ModelSpec():
     def instantiate_estimator(self, Estimator, **kwargs):
         self.estimator = Estimator(**kwargs)
 
-    def predict(self):
-        self.y_train_pred = self.estimator.predict(self.X_train)
-        if self.test is not None:
-            self.y_test_pred = self.estimator.predict(self.X_test)
+    def predict(self, kind='regressor'):
+        if kind=='regressor':
+            self.y_train_pred = self.estimator.predict(self.X_train)
+            if self.test is not None:
+                self.y_test_pred = self.estimator.predict(self.X_test)
+        elif kind=='classifier':
+            self.y_train_pred = self.estimator.predict_proba(self.X_train)
+            if self.test is not None:
+                self.y_test_pred = self.estimator.predict_proba(self.X_test)
 
     def evaluate(self, kind='regressor'):
         if kind=='regressor':
@@ -88,8 +104,16 @@ class _ModelSpec():
                 _print_regression_error(self.y_test, self.y_test_pred)
         elif kind=='classifier':
             if self.test is not None:
-                # Plot roc auc curve.
-                pass
+
+                # Binary classification.
+                if self.y_test_pred.shape[1] == 2:
+                    _plot_roc_curve(self.y_test, self.y_test_pred[:,1])
+                    print('\033[1mAUC: \033[0m')
+                    print(skl.metrics.roc_auc_score(self.y_test, self.y_test_pred[:,1]))
+
+                # Multiclass classification.
+                else:
+                    pass
 
     def instantiate_train_predict_eval(self, Estimator, kind='regressor', **kwargs):
         """
@@ -98,6 +122,6 @@ class _ModelSpec():
         est_kwargs, fit_kwargs = _separate_estimator_fit_params(Estimator)
         self.instantiate_estimator(Estimator, **est_kwargs)
         self.estimator.fit(self.X_train, self.y_train, **fit_kwargs)
-        self.predict()
+        self.predict(kind=kind)
         self.evaluate(kind=kind)
         return self.estimator

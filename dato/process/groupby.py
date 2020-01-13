@@ -32,7 +32,7 @@ Filter = _make_pipeable_pandas('filter', parent_class=pd.core.groupby.generic.Da
 First = _make_pipeable_pandas('first', parent_class=pd.core.groupby.generic.DataFrameGroupBy)
 Get_group = _make_pipeable_pandas('get_group', parent_class=pd.core.groupby.generic.DataFrameGroupBy)
 Groups = _make_pipeable_pandas('groups', parent_class=pd.core.groupby.generic.DataFrameGroupBy)
-Head = _make_pipeable_pandas('head', parent_class=pd.core.groupby.generic.DataFrameGroupBy)
+# Head = _make_pipeable_pandas('head', parent_class=pd.core.groupby.generic.DataFrameGroupBy)
 # Hist = _make_pipeable_pandas('hist', parent_class=pd.core.groupby.generic.DataFrameGroupBy)
 Idxmax = _make_pipeable_pandas('idxmax', parent_class=pd.core.groupby.generic.DataFrameGroupBy)
 Idxmin = _make_pipeable_pandas('idxmin', parent_class=pd.core.groupby.generic.DataFrameGroupBy)

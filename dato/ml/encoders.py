@@ -9,7 +9,6 @@ from .preprocessing import TrainTestSplit
 from .base import _ModelSpec
 
 
-@use_first_arg_only
 @Pipeable
 def LabelEnc(m, columns):
     """Label encoder.
@@ -21,6 +20,5 @@ def LabelEnc(m, columns):
     """
     encoded_df, enc_dict = m.encode(skl.preprocessing.LabelEncoder, columns)
 
-    return m, encoded_df, enc_dict
-
+    return m
 

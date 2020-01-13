@@ -12,13 +12,12 @@ def InitModel(df, label, *args, **kwargs):
     X_columns = [col for col in df.columns if col!=label]
     newdf = df[X_columns + [label]]
     m = _ModelSpec(newdf)
-    return (m, newdf)
+    return m
 
 
-@use_first_arg_only
 @Pipeable
 def TrainTestSplit(m, **kwargs):
     train, test = m.train_test_split(**kwargs)
-    return (m, train, test)
+    return m
 
 

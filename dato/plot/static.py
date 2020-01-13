@@ -8,7 +8,7 @@ import numpy as np
 import pandas as pd
 from seaborn import FacetGrid
 
-from ..base import Pipeable, unpack_input
+from ..base import Pipeable
 from ..style import mpl_style_decorator
 
 line_kwargs = {

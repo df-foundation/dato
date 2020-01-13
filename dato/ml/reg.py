@@ -7,24 +7,21 @@ import sklearn as skl
 from ..base import Pipeable, use_first_arg_only
 
 
-@use_first_arg_only
 @Pipeable
 def LinearReg(m, **kwargs):
     m.instantiate_train_predict_eval(LinearRegression, kind='regressor')
-    return (m, m.estimator)
+    return m
 
 
-@use_first_arg_only
 @Pipeable
 def DecisionTreeReg(m, **kwargs):
     m.instantiate_train_predict_eval(DecisionTreeRegressor, kind='regressor')
-    return (m, m.estimator)
+    return m
 
 
-@use_first_arg_only
 @Pipeable
 def XGBReg(m, **kwargs):
     m.instantiate_train_predict_eval(XGBRegressor, kind='regressor')
-    return (m, m.estimator)
+    return m
 
 

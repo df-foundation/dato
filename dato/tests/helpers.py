@@ -22,7 +22,7 @@ def full_mock_model(df, Encoder, Estimator):
         >> TrainTestSplit(random_state=2701) \
         >> LinearReg
 
-    modelspec = model_output[0]
+    modelspec = model_output
     mse_piped = skl.metrics.mean_squared_error(modelspec.y_train, modelspec.y_train_pred)
     return mse_manual, mse_piped
 
@@ -38,5 +38,5 @@ def compare_encoders(df, Encoder, Enc):
     new_x2_manual = le.fit_transform(df.x2)
 
     output = df >> InitModel(label='y') >> Enc(columns=['x2'])
-    modelspec = output[0]
+    modelspec = output
     return (new_x2_manual == modelspec.data.x2).all()

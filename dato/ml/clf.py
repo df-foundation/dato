@@ -6,10 +6,9 @@ from sklearn import linear_model
 from ..base import Pipeable, use_first_arg_only
 
 
-@use_first_arg_only
 @Pipeable
 def LogisticReg(m, **kwargs):
     m.instantiate_train_predict_eval(linear_model.LogisticRegression, kind='classifier')
-    return (m, m.estimator)
+    return m
 
 
