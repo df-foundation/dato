@@ -22,7 +22,7 @@ line_kwargs = {
 class DatoFacetGrid(FacetGrid):
     def _facet_plot(self, func, ax, plot_args, plot_kwargs):
         # Draw the plot
-        plot_args >> func(**plot_kwargs)
+        func(*plot_args, **plot_kwargs)
 
         # Sort out the supporting information
         self._update_legend_data(ax)
@@ -31,112 +31,98 @@ class DatoFacetGrid(FacetGrid):
 
 @Pipeable
 @mpl_style_decorator
-def Plot(data, kind='line', x=None, y=None, row=None, col=None, hue=None, **kwargs):
+def Plot(data, x=None, y=None, *args, kind='line', row=None, col=None, hue=None, **kwargs):
+
+    # Parse flexible inputs.
+    if type(data) == tuple:
+        data = pd.DataFrame(data).T
+        x = data.columns[0]
+        y = data.columns[1]
 
     function_map = {
-        'scatter': Scatter,
-        'line': Line,
-        'hist': Hist,
-        'bar': Bar,
-        'barh': Barh,
-        'box': Boxplot,
+        'scatter': _scatter,
+        'line': _line,
+        'hist': _hist,
+        'bar': _bar,
+        'barh': _barh,
+        'box': _boxplot,
     }
     plot_function = function_map[kind]
 
     # Deal with extra logic.
     if (row is not None) or (col is not None) or (hue is not None):
         g = DatoFacetGrid(data, row=row, col=col, hue=hue, **kwargs)
-        g = g.map(plot_function, x, y, **kwargs)
-    else:
-        if (x is not None):
-            g = data >> plot_function(x=x, y=y, **kwargs)
+        if y is not None:
+            g = g.map(plot_function, x, y, *args, **kwargs)
         else:
-            g = data >> plot_function(**kwargs)
+            g = g.map(plot_function, x, *args, **kwargs)
+    else:
+        if x is not None:
+            if y is not None:
+                g = plot_function(data[x], data[y], *args, **kwargs)
+            else:
+                g = plot_function(data[x], *args, **kwargs)
+        else:
+            g = plot_function(data, *args, **kwargs)
     return g
 
 
-def allow_multiple_plot_methods(func):
-    def wrapper(data, *args, **kwargs):
-        # Check data type.
-        # If series, plot is automatic.
-        if type(data) == pd.Series:
-            return func(data, *args, **kwargs)
-        # If x or y are specified, then assume dataframe.
-        elif 'x' in kwargs:
-            x = data[kwargs.pop('x')]
-            if 'y' in kwargs:
-                y = data[kwargs.pop('y')]
-            else:
-                y = None
 
-            if y is not None:
-                return func(x, y, *args, **kwargs)
-            else:
-                return func(x, *args, **kwargs)
-        elif type(data) in (tuple, list):
-            return func(*data, *args, **kwargs)
-        else:
-            return func(data, *args, **kwargs)
-    return wrapper
-
-
-@Pipeable
-@mpl_style_decorator
-@allow_multiple_plot_methods
-def Line(*args, **kwargs):
-    return plt.plot(*args, **kwargs)
-
-
-@Pipeable
-@mpl_style_decorator
-@allow_multiple_plot_methods
-def Scatter(*args, **kwargs):
+def _scatter(x, y=None, *args, **kwargs):
     if 'alpha' not in kwargs:
         kwargs['alpha'] = 0.5
-    return plt.scatter(*args, **kwargs)
+    plt.scatter(x, y, *args, **kwargs)
+
+
+def _hist(x, *args, **kwargs):
+    return plt.hist(x, *args, **kwargs)
+
+
+def _line(x, y=None, *args, **kwargs):
+    if y is not None:
+        return plt.plot(x, y, *args, **kwargs)
+    else:
+        return x.plot(*args, kind='line', **kwargs)
+
+
+def _bar(x, height=None, *args, **kwargs):
+    if height is not None:
+        return plt.bar(x, height, *args, **kwargs)
+    else:
+        return x.plot(*args, kind='bar', **kwargs)
+
+
+def _barh(y, width=None, *args, **kwargs):
+    if width is not None:
+        return plt.barh(x, width, *args, **kwargs)
+    else:
+        return y.plot(*args, kind='barh', **kwargs)
+
+
+def _boxplot(x, *args, **kwargs):
+    return x.plot(*args, kind='box', **kwargs)
 
 
 @Pipeable
-@mpl_style_decorator
-def Bar(*args, **kwargs):
-    return plt.bar(*args, **kwargs)
+def Scatter(data, x=None, y=None, *args, **kwargs):
+    return data >> Plot(x=x, y=y, kind='scatter', *args, **kwargs)
 
 
 @Pipeable
-@mpl_style_decorator
-def Barh(*args, **kwargs):
-    return plt.bar(*args, **kwargs)
+def Hist(data, x=None, *args, **kwargs):
+    return data >> Plot(x=x, kind='hist', *args, **kwargs)
 
 
 @Pipeable
-@mpl_style_decorator
-def Boxplot(df, *args, **kwargs):
-    return df.boxplot(*args, **kwargs)
+def Bar(data, x=None, height=None, *args, **kwargs):
+    return data >> Plot(x=x, y=height, kind='bar', *args, **kwargs)
 
 
 @Pipeable
-@mpl_style_decorator
-def LogLogHist(a, bins=10, range=None, normed=None, weights=None, density=None, **kwargs):
-    """A log-log histogram.
-    """
-
-    # If there are no plot kwargs, use default style.
-    if not kwargs:
-        kwargs.update(line_kwargs)
-
-    y, x = np.histogram(a, bins=bins, range=range, normed=normed, weights=weights, density=density)
-    handle = plt.plot((x[1:] + x[:-1])/2, y, **kwargs)
-    plt.xscale('log')
-    plt.yscale('log')
-
-    return handle
+def Barh(data, y=None, width=None, *args, **kwargs):
+    return data >> Plot(x=y, y=width, kind='barh', *args, **kwargs)
 
 
 @Pipeable
-@mpl_style_decorator
-def Hist(*args, **kwargs):
-    handle = plt.hist(*args, **kwargs)
-    return handle
-
-
-
+def Box(data, x=None, *args, **kwargs):
+    return data >> Plot(x=x, kind='box', *args, **kwargs)

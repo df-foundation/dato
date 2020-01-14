@@ -5,7 +5,7 @@ class Pipeable():
     """Class that enables `>>` to function as a piping operator.
     """
 
-    def __init__(self, base_object=None, *args, unpack_input=False, use_first_arg_only=False, try_normal_call_first=True, **kwargs):
+    def __init__(self, base_object=None, *args, unpack_input=False, use_first_arg_only=False, try_normal_call_first=False, **kwargs):
         self.__doc__ = base_object.__doc__
         self.base_object = base_object
         self.args = args
