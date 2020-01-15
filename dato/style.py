@@ -9,28 +9,43 @@ rc = {
 }
 
 
+FONT_DICT = {'family': 'Helvetica',
+            'size': 8}
+
+
 STYLES = {
     'dato_dark': {
-        'cycler': ["#FFC045", '#E01A4F', "#0A91AB", "#EB8258", "#995D81", "#F9F7F3", "#B5E2FA", "#EDDEA4", ],
-        'grid': '#383B3F',
-        'ticks': '#9CA7A8',
-        'labels': '#9CA7A8',
-        'title': 'white',
+        'axes.edgecolor': '#4A5151',
+        'axes.labelcolor': '#9CA7A8',
         'bg': '#222626',
+        'font': FONT_DICT,
+        'cycler': ["#FFC045", '#E01A4F', "#0A91AB", "#EB8258", "#995D81", "#F9F7F3", "#B5E2FA", "#EDDEA4", ],
+        'grid.color': '#383B3F',
+        'legend.textcolor': 'white',
         'plotbg': '#222626',
-        'edge': '#4A5151',
+        'tick.color': '#9CA7A8',
+        'text.color': 'white',
     },
     'dato_light': {
+        'axes.edgecolor': 'black',
+        'axes.labelcolor': 'black',
         'cycler': ["#463b75", "#e01a4f", "#6c969d", "#0c090d", "#A7D49B",],
-        'grid': '#F5F4F8',
         'bg': (1, 1, 1, 0),
-        'title': 'black',
+        'font': FONT_DICT,
+        'grid.color': '#F5F4F8',
+        'legend.textcolor': 'black',
         'plotbg': 'white',
-        'ticks': 'black',
-        'edge': 'black',
-        'labels': 'black',
+        'tick.color': 'black',
+        'text.color': 'black',
     },
 }
+
+
+def _check_list_empty(list_obj):
+    try:
+        return all(map(_check_list_empty, list_obj))
+    except:
+        return False
 
 
 def use(style_name=None, dato_only=False):
@@ -43,30 +58,48 @@ def use(style_name=None, dato_only=False):
         style = STYLES[style_name]
 
     if not dato_only:
-        grid_color = style['grid']
-
         color_cycler = style['cycler']
 
         mpl.rc('axes', prop_cycle=(cycler('color', color_cycler)))
 
         mpl.rcParams['figure.facecolor'] = style['bg']
         mpl.rcParams['axes.facecolor'] = style['plotbg']
-        mpl.rcParams['xtick.color'] = style['ticks']
-        mpl.rcParams['ytick.color'] = style['ticks']
-        mpl.rcParams['axes.labelcolor'] = style['labels']
-        mpl.rcParams['axes.edgecolor'] = style['edge']
-        mpl.rcParams['text.color'] = style['title']
+        mpl.rcParams['xtick.color'] = style['tick.color']
+        mpl.rcParams['ytick.color'] = style['tick.color']
+        mpl.rcParams['axes.labelcolor'] = style['axes.labelcolor']
+        mpl.rcParams['axes.edgecolor'] = style['axes.edgecolor']
+        mpl.rcParams['text.color'] = style['text.color']
 
         mpl.rcParams['figure.figsize'] = [4.86, 3]
         mpl.rcParams['figure.dpi'] = 130
         mpl.rcParams['axes.axisbelow'] = True
-        font = {'family' : 'Helvetica',
-                'size'   : 8}
-        mpl.rc('font', **font)
+        mpl.rc('font', **style['font'])
 
         mpl.rcParams['axes.grid'] = True
-        mpl.rcParams['grid.color'] = grid_color
+        mpl.rcParams['grid.color'] = style['grid.color']
         mpl.rcParams['grid.linestyle'] = ':'
+
+
+def datolegend(legend_out=True, **kwargs):
+    style = STYLES[rc['style']]
+
+    legend_dict = {
+        'prop': style['font'],
+        'frameon': False,
+        'framealpha': 0,
+    }
+    if legend_out:
+        legend_dict.update({
+            'loc': 'center left',
+            'bbox_to_anchor': (1, 0.5),
+        })
+    legend_dict.update(kwargs)
+
+    handles = plt.gca().get_legend_handles_labels()
+    if not _check_list_empty(handles):
+        leg = plt.legend(**legend_dict)
+        for h, t in zip(leg.legendHandles, leg.get_texts()):
+            t.set_color(style['legend.textcolor'])
 
 
 def mpl_style_decorator(func):
@@ -82,6 +115,9 @@ def mpl_style_decorator(func):
             use(rc['style'])
 
             func_return_value = func(*args, **kwargs)
+
+            # Handle legends.
+            # datolegend()
 
             # Deal with datetimes.
             fig = plt.gcf()
