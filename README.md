@@ -1,17 +1,27 @@
 <img width="250" src="https://github.com/dataframehq/dato/blob/master/docs/_static/img/dato.png?raw=true">
 
-`dato` is an open source library that provides a **rapid, declarative ecosystem for reproducible data science** within python. This consists of three major sub-modules:
+<a href="https://dato.dtfr.me"><b>Read our documentation!</b></a>
 
-* `dato.base`, which facilitates R magrittr-style piping using the right bitshift operator `>>`, while staying largely pythonic in implementation. And unlike other `pandas`-oriented systems \(e.g. [dfply](https://github.com/kieferk/dfply) or [pandas-ply](https://github.com/coursera/pandas-ply)\), `dato.pipe` is meant to be flexible, and therefore does not enforce any particular object input types.
-* `dato.process`, which implements pipe-ready pandas-style functionality.
-* `dato.plot`, which sets presentation-ready default styling for plotting tools, such as `matplotlib`.
-* `dato.ml`, which greatly simplifies and standardizes syntax across popular ML libraries, and implements automatic.
+`dato` is an open source library that provides a **rapid, declarative ecosystem for reproducible data science** within python. `dato` accomplishes this by \(1\) enabling piping with `>>` and \(2\) unifying common data science libraries under a common syntax.
+
+```text
+df >> GroupBy('country') >> Sum >> Hist('revenue', col='age')
+```
+
+Dato has four major components:
+
+* **`dato.base.Pipeable`** Decorator that enables piping with `>>`.
+* **`dato.process`** Sub-module with pipe-compatible `pandas` operations.
+* **`dato.plot`** Sub-module with pipe-compatible plotting operations, following a consistent `pandas`-inspired syntax with `seaborn`-esque extended functionality.
+* **`dato.ml`**_\(in development\)_  Simplifies and standardizes syntax across popular ML libraries.
+
 
 ## Installation
 
 ```text
 pip install dato
 ```
+
 
 ## Basic usage: the `Pipeable` class
 
@@ -31,14 +41,14 @@ Or even more concisely, any existing function `func` that you'd like to use with
 Func = Pipeable(func)
 ```
 
-The entire piping framework is incredibly simple \(it only takes up around 20 lines of code\), and can be found in `dato.base.Pipeable`. If you write a custom function, please consider making a pull request. _Happy piping!_
+The entire piping framework is incredibly simple \(it only takes up around 40 lines of code\), and can be found in `dato.base.Pipeable`. If you write a custom function, please consider making a pull request. _Happy piping!_
 
 ## Some illustrative examples
 
 We used this framework to implement data science-specific methods to improve QOL when performing repetitive data-related tasks \(and to illustrate the potential of `dato`\). Our biggest pain points in this domain have been:
 
 * Remembering pandas syntax and defaults.
-* Styling matplotlib visualizations.
+* Styling matplotlib/pandas/seaborn visualizations.
 * Remembering scikit-learn model creation syntax, best practices, and evaluation metrics.
 
 We have therefore focused on wrapping and consolidating these libraries. **We provide a few examples for each of these use cases below, but for full functionality, see the documentation.**
