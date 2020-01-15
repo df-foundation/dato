@@ -4,41 +4,24 @@
 
 ![](https://github.com/dataframehq/dato/blob/master/docs/_static/img/dato.png?raw=true)
 
-`dato` is an open source library that provides a **rapid, declarative ecosystem for reproducible data science** within python. This consists of four major sub-modules:
+`dato` is an open source library that provides a **rapid, declarative ecosystem for reproducible data science** within python. `dato` accomplishes this by \(1\) enabling piping with `>>` and \(2\) unifying common data science libraries under a common syntax.
 
-* **`dato.base`** Facilitates R magrittr-style piping using the right bitshift operator `>>`, while staying largely pythonic in implementation. And unlike other `pandas`-oriented systems \(e.g. [dfply](https://github.com/kieferk/dfply) or [pandas-ply](https://github.com/coursera/pandas-ply)\), `dato.pipe` is meant to be flexible, and therefore does not enforce any particular object input types.
-* **`dato.process`** Implements pipe-ready pandas-style data-wrangling methods.
-* **`dato.plot`**  Sets presentation-ready default styling for `matplotlib`, while enabling `seaborn`-esque extended functionality, all under a common `pandas.DataFrame.plot`-like syntax.
-* **`dato.ml`** Simplifies and standardizes syntax across popular ML libraries \(_in development_\).
+```text
+df >> GroupBy('country') >> Sum >> Hist('revenue', col='age')
+```
+
+Dato has four major components: 
+
+* **`dato.base.Pipeable`** Decorator that enables piping with `>>`. 
+* **`dato.process`** Sub-module with pipe-compatible `pandas` operations.
+* **`dato.plot`** Sub-module with pipe-compatible plotting operations, following a consistent `pandas`-inspired syntax with `seaborn`-esque extended functionality.
+* **`dato.ml`**_\(in development\)_  Simplifies and standardizes syntax across popular ML libraries.
 
 ## Installation
 
 ```text
 pip install dato
 ```
-
-## Usage: **piping**
-
-Simply put, nested functions can be decorated so that
-
-```text
-d(c(b(a)))
-```
-
-can be rewritten
-
-```text
-a >> b >> c >> d
-```
-
-This can be accomplished by either using the `Pipeable` class as a decorator around `b`, `c`, and `d`, or by simply setting `b=Pipeable(b)`.
-
-Though the basic piping behavior is supported in R, `dato` enables it within Python for easier debugging and productionization support, while also forcing this pattern to be explicitly scoped for safety \(we also support piping of multiple arguments!\). In addition, we supply convenient, opinionated sub-modules that we personally use to quickly execute simple data science tasks.
-
-Our primary objective here is not to provide a new library that supersedes data science staples such as `pandas`, `matplotlib`, or `scikit-learn` but rather, to:
-
-1. Provide a flexible way to safely and easily use _any_ library, declaratively, in support of declarative data workflows.
-2. Introduce opinionated versions of common data operations to improve QOL.
 
 ## Why pipe?
 

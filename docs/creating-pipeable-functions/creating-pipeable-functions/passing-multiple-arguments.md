@@ -1,6 +1,9 @@
-# Passing multiple arguments
+# Special handling of inputs
 
-Unlike R's `magrittr`, `dato` allows for any number of arguments to be passed through `>>`, and used in order as arguments in the receiving `Pipeable` object. While this can be implemented using special tuple-processing logic, we provide the `unpack_input` decorator to simplify this process.
+Unlike R's `magrittr`, `dato` allows for any number of arguments to be passed through `>>`, and used in order as arguments in the receiving `Pipeable` object. While this can be implemented using some simple array-processing logic, we provide a number of decorators and arguments to make this process more convenient:
+
+* `unpack_input`: pass `input` as `*input`.
+* : pass only the first element of `input`.
 
 For example, a common example is the `pandas.merge` method, which merges two tables
 
@@ -25,4 +28,6 @@ Or, more simply with `unpack_input` as:
 def Merge(args, **kwargs):
     pd.merge(args, **kwargs)
 ```
+
+
 

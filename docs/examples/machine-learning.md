@@ -1,6 +1,6 @@
-# Machine learning
+# Machine learning \(in progress\)
 
-We provide basic machine learning tooling by wrapping `scikit-learn` objects, contained in `./dato/ml.py` \(the `dato.ml` module\). Where possible, we following our typical naming convention - UpperCamelCase w/underscores removed, but because many scikit-learn objects are classes, this is not always possible. For `Regressor` and `Classifier` objects, we therefore simply abridge these terms to `Reg` and `Clf` in our `Pipeable`-wrapped versions. For example, the `LinearRegression` implementation is called `LinearReg`, and `XGBRegressor` is named `XGBReg`
+We provide basic machine learning tooling by wrapping `scikit-learn` objects, contained in `./dato/ml.py` \(the `dato.ml` module\). Where possible, we following our typical naming convention - UpperCamelCase w/underscores removed, but because many scikit-learn objects are classes, this is not always possible. For `Regressor` and `Classifier` objects, we therefore simply abridge these terms to `Reg` and `Clf` in our `Pipeable`-wrapped versions. For example, the `LinearRegression` implementation is called `LinearReg`, and `XGBRegressor` is named `XGBReg`.
 
 ## The `_ModelSpec` accumulator
 

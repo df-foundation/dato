@@ -4,14 +4,15 @@
 
 ## Creating pipeable functions
 
-* [Creating pipeable functions](creating-pipeable-functions/creating-pipeable-functions.md)
-* [Passing multiple arguments](creating-pipeable-functions/passing-multiple-arguments.md)
+* [Creating Pipeable functions](creating-pipeable-functions/creating-pipeable-functions/README.md)
+  * [Special handling of inputs](creating-pipeable-functions/creating-pipeable-functions/passing-multiple-arguments.md)
+  * [Enable normal calls](creating-pipeable-functions/creating-pipeable-functions/enable-normal-calls.md)
 
 ## Data methods <a id="examples"></a>
 
 * [Data cleaning](examples/data-cleaning.md)
 * [Visualization](examples/visualization.md)
-* [Machine learning](examples/machine-learning.md)
+* [Machine learning \(in progress\)](examples/machine-learning.md)
 
 ## Contribution
 

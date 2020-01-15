@@ -1,8 +1,35 @@
 # Visualization
 
-Visualization methods are located in `./dato/plot.py` \(the `dato.plot` module\). By default, all plotting functions use `matplotlib` as the base plotting library, but with \(in our opinion\) improved default styles, specified in `./dato/style.py`.
+Visualization methods are located in `./dato/plot.py` \(the `dato.plot` module\). We also support improved \(in our opinion\) default styles, specified in `./dato/style.py`.
 
-We again follow the same naming convention where possible -- we name `Pipeable`-decorated functions with the same name as the underlying `matplotlib` functions, but formatted in UpperCamelCase with underscores removed.
+## dato.Plot
+
+ We have a single main plotting function, `Plot`, which loosely follows the `pandas.DataFrame.plot()` syntactical structure.
+
+```text
+df >> Plot('a', 'b', kind='line')
+```
+
+While we originally intended the plotting sub-module to simply wrap `matplotlib`, `pandas`, and/or `seaborn`, we very quickly realized a pain point in doing this is that each of these libraries has **vastly different syntactical structures** \(even internally!\). We decided to prioritize simplicity over universal inclusion, and therefore ultimately decided on having a single base plotting function.
+
+`kind` can take the following arguments:
+
+* scatter
+* line
+* hist
+* bar
+* barh
+* box
+
+We implement each of these as stand-alone Pipeable objects as well \(capitalized\) -- `Scatter`, `Hist` , `Bar`, etc \(`Line` doesn't exist, as it's the default functionality of `Plot`\).
+
+Although `dato.Plot` does borrow most of its base syntactical structure from `pandas`, it does have some extended functionality inherited from `seaborn`. For example, facet grids \(and so the arguments `row`, `col` and `hue`\)  are natively supported:
+
+```text
+df >> Hist('Age', col='Sex', hue='Survived', alpha=0.5)
+```
+
+![](../.gitbook/assets/image%20%281%29.png)
 
 ## Styling
 
@@ -21,4 +48,10 @@ By default, the above commands apply `dato` styles globally, but these can be re
 ```text
 dato.style.use('dato_dark', dato_only=True)
 ```
+
+We are huge fans of dark mode:
+
+![](../.gitbook/assets/image%20%282%29.png)
+
+
 
