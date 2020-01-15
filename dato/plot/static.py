@@ -9,7 +9,7 @@ import pandas as pd
 from seaborn import FacetGrid
 
 from ..base import Pipeable
-from ..style import mpl_style_decorator
+from ..style import mpl_style_decorator, datolegend
 
 line_kwargs = {
     'marker': 'o',
@@ -31,7 +31,7 @@ class DatoFacetGrid(FacetGrid):
 
 @Pipeable
 @mpl_style_decorator
-def Plot(data, x=None, y=None, *args, kind='line', row=None, col=None, hue=None, **kwargs):
+def Plot(data, x=None, y=None, *args, kind='line', row=None, col=None, hue=None, legend_out=True, **kwargs):
 
     # Parse flexible inputs.
     if type(data) == tuple:
@@ -51,11 +51,11 @@ def Plot(data, x=None, y=None, *args, kind='line', row=None, col=None, hue=None,
 
     # Deal with extra logic.
     if (row is not None) or (col is not None) or (hue is not None):
-        g = DatoFacetGrid(data, row=row, col=col, hue=hue, **kwargs)
+        g = DatoFacetGrid(data, row=row, col=col, hue=hue, legend_out=legend_out)
         if y is not None:
-            g = g.map(plot_function, x, y, *args, **kwargs)
+            g = g.map(plot_function, x, y, *args, **kwargs).add_legend()
         else:
-            g = g.map(plot_function, x, *args, **kwargs)
+            g = g.map(plot_function, x, *args, **kwargs).add_legend()
     else:
         if x is not None:
             if y is not None:
@@ -64,6 +64,7 @@ def Plot(data, x=None, y=None, *args, kind='line', row=None, col=None, hue=None,
                 g = plot_function(data[x], *args, **kwargs)
         else:
             g = plot_function(data, *args, **kwargs)
+        datolegend(legend_out=legend_out)
     return g
 
 
