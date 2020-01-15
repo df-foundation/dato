@@ -1,6 +1,12 @@
-<img width="250" src="https://github.com/dataframehq/dato/blob/master/docs/_static/img/dato.png?raw=true">
+<p align="center">
+  <a href="https://dato.dtfr.me">
+    <img width="250" src="https://github.com/dataframehq/dato/blob/master/docs/_static/img/dato.png?raw=true">
+  </a>
 
-<a href="https://dato.dtfr.me"><b>Read our documentation!</b></a>
+  <a href="https://dato.dtfr.me">
+    <b>Read our documentation!</b>
+  </a>
+</p>
 
 `dato` is an open source library that provides a **rapid, declarative ecosystem for reproducible data science** within python. `dato` accomplishes this by \(1\) enabling piping with `>>` and \(2\) unifying common data science libraries under a common syntax.
 
