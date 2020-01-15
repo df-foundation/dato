@@ -29,7 +29,7 @@ Although `dato.Plot` does borrow most of its base syntactical structure from `pa
 df >> Hist('Age', col='Sex', hue='Survived', alpha=0.5)
 ```
 
-![](../.gitbook/assets/image%20%281%29.png)
+![](../.gitbook/assets/image%20%283%29.png)
 
 ## Styling
 
@@ -48,8 +48,6 @@ By default, the above commands apply `dato` styles globally, but these can be re
 ```text
 dato.style.use('dato_dark', dato_only=True)
 ```
-
-We are huge fans of dark mode:
 
 ![](../.gitbook/assets/image%20%282%29.png)
 
