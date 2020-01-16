@@ -14,6 +14,7 @@ FONT_DICT = {'family': 'Helvetica',
 
 
 STYLES = {
+    'default': {},
     'dato_dark': {
         'axes.edgecolor': '#4A5151',
         'axes.labelcolor': '#9CA7A8',
@@ -57,7 +58,7 @@ def use(style_name=None, dato_only=False):
 
         style = STYLES[style_name]
 
-    if not dato_only:
+    if not dato_only and rc['style'] != 'default':
         color_cycler = style['cycler']
 
         mpl.rc('axes', prop_cycle=(cycler('color', color_cycler)))
@@ -81,25 +82,26 @@ def use(style_name=None, dato_only=False):
 
 
 def datolegend(legend_out=True, **kwargs):
-    style = STYLES[rc['style']]
+    if rc['style'] != 'default':
+        style = STYLES[rc['style']]
 
-    legend_dict = {
-        'prop': style['font'],
-        'frameon': False,
-        'framealpha': 0,
-    }
-    if legend_out:
-        legend_dict.update({
-            'loc': 'center left',
-            'bbox_to_anchor': (1, 0.5),
-        })
-    legend_dict.update(kwargs)
+        legend_dict = {
+            'prop': style['font'],
+            'frameon': False,
+            'framealpha': 0,
+        }
+        if legend_out:
+            legend_dict.update({
+                'loc': 'center left',
+                'bbox_to_anchor': (1, 0.5),
+            })
+        legend_dict.update(kwargs)
 
-    handles = plt.gca().get_legend_handles_labels()
-    if not _check_list_empty(handles):
-        leg = plt.legend(**legend_dict)
-        for h, t in zip(leg.legendHandles, leg.get_texts()):
-            t.set_color(style['legend.textcolor'])
+        handles = plt.gca().get_legend_handles_labels()
+        if not _check_list_empty(handles):
+            leg = plt.legend(**legend_dict)
+            for h, t in zip(leg.legendHandles, leg.get_texts()):
+                t.set_color(style['legend.textcolor'])
 
 
 def mpl_style_decorator(func):
@@ -112,7 +114,8 @@ def mpl_style_decorator(func):
             original_mpl_params = dict(mpl.rcParams)
 
             # Use custom styling.
-            use(rc['style'])
+            if rc['style'] != 'default':
+                use(rc['style'])
 
             func_return_value = func(*args, **kwargs)
 

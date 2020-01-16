@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setup(
     name='dato',
-    version='0.0.0',
+    version='0.0.1a3',
     license='GPLv3',
     description='Declarative syntactic sugar for data piping.',
     long_description=long_description,
