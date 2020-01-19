@@ -4,7 +4,7 @@ We provide basic machine learning tooling by wrapping `scikit-learn` objects, co
 
 ## The `_ModelSpec` accumulator
 
-Unfortunately, machine learning modeling does not always follow a single-i/o workstream. Data is often split off and reserved for validation, requiring an accumulator to be passed through our pipelines, storing this data for downstream consumption. We do this by initiating a `_ModelSpec` object once `InitModel` is called. Users may want to access the following components of this class while debugging their models:
+Machine learning modeling does not always follow a single-i/o workstream. Data is often split off and reserved for validation, requiring an accumulator to be passed through our pipelines, storing this data for downstream consumption. We do this by initiating a `_ModelSpec` object once `InitModel` is called. Users may want to access the following components of this class while debugging their models:
 
 ```text
 _ModelSpec.X_train
