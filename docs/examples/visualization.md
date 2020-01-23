@@ -4,7 +4,7 @@ Visualization methods are located in `./dato/plot.py` \(the `dato.plot` module\)
 
 ## dato.Plot
 
- We have a single main plotting function, `Plot`, which loosely follows the `pandas.DataFrame.plot()` syntactical structure.
+ We have a single main plotting function, `Plot`, which loosely follows the `pandas.DataFrame.plot()` syntactical structure, but adds `seaborn`-like behavior, while being entirely customizable through `matplotlib` operations.
 
 ```text
 df >> Plot('a', 'b', kind='line')
@@ -33,7 +33,7 @@ df >> Hist('Age', col='Sex', hue='Survived', alpha=0.5)
 
 ## Styling
 
-We currently support three modes: `dark_mode`, `light_mode`, and `default` \(which disables all styling\), which can be toggled as follows:
+We currently support three modes: `dark_mode`, `light_mode`, and `default` **\(which disables all styling\)**, which can be toggled as follows:
 
 ```text
 import dato
@@ -51,6 +51,4 @@ dato.style.use('dato_dark', dato_only=True)
 ```
 
 ![](../.gitbook/assets/image%20%282%29.png)
-
-
 
