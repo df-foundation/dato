@@ -4,6 +4,9 @@
   </a>
 </p>
 
+![](https://github.com/dataframehq/dato/workflows/Python%20CI/badge.svg)
+
+
 ---
 
 <a href="https://dato.dtfr.me">
