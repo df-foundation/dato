@@ -50,7 +50,7 @@ class Pipeable():
                 *args,
                 unpack_input=self.unpack_input,
                 use_first_arg_only=self.use_first_arg_only,
-                enable_normal_calls=self.enable_normal_calls,
+                try_normal_call_first=self.try_normal_call_first,
                 **kwargs
             )
 
