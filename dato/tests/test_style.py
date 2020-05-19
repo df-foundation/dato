@@ -2,7 +2,7 @@ import pytest
 import matplotlib as mpl
 
 from .fixtures import mock_user_data, mock_class_object
-from dato.base import Pipeable
+from pipey import Pipeable
 from dato.style import mpl_style_decorator
 
 import dato

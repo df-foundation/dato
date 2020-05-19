@@ -3,7 +3,7 @@ import numpy as np
 import sklearn as skl
 from sklearn import linear_model
 
-from ..base import Pipeable, use_first_arg_only
+from pipey import Pipeable, use_first_arg_only
 
 
 @Pipeable

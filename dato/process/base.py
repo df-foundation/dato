@@ -3,7 +3,7 @@ Base pandas/dask functionality. `pd.FUNCTIONS`.
 """
 import pandas as pd
 
-from ..base import Pipeable, unpack_input, append_docstring
+from pipey import Pipeable, unpack_input, append_docstring
 
 
 def _make_pipeable_pandas(func_name, parent_class=pd, is_property=False):

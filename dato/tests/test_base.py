@@ -2,7 +2,7 @@ import pytest
 import pandas as pd
 
 from .fixtures import mock_user_data, mock_class_object
-from dato.base import Pipeable
+from pipey import Pipeable
 from dato.process import GroupBy
 
 import dato

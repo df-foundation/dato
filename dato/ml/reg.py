@@ -4,7 +4,7 @@ from xgboost import XGBRegressor
 import numpy as np
 import sklearn as skl
 
-from ..base import Pipeable, use_first_arg_only
+from pipey import Pipeable, use_first_arg_only
 
 
 @Pipeable
