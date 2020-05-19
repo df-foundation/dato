@@ -2,7 +2,7 @@
 Matplotlib plotting functions.
 """
 
-from ..base import Pipeable, use_first_arg_only
+from pipey import Pipeable, use_first_arg_only
 from .base import _ModelSpec
 
 @Pipeable
@@ -19,5 +19,3 @@ def InitModel(df, label, *args, **kwargs):
 def TrainTestSplit(m, **kwargs):
     train, test = m.train_test_split(**kwargs)
     return m
-
-

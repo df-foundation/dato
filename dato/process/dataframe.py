@@ -3,7 +3,7 @@ pandas.DataFrame processing functions.
 """
 import pandas as pd
 
-from ..base import Pipeable, unpack_input, append_docstring
+from pipey import Pipeable, unpack_input, append_docstring
 from .base import _make_pipeable_pandas
 
 

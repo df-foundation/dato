@@ -2,7 +2,7 @@ import pytest
 import pandas as pd
 
 from .fixtures import mock_data_a, mock_data_b, mock_data_date, mock_data_null, mock_user_data
-from dato.base import Pipeable
+from pipey import Pipeable
 from dato.process import Drop, DropNA, FillNA, GroupBy, Mean, Merge, Sample, Select, Sum, ToDatetime
 
 import dato
